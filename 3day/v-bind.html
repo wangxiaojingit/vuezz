@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>
+    .box{width:100px;height:100px;background:green;}
+    .x{color:gold;}
+    .f{font-size:100px;}
+  </style>
+</head>
+<body>
+   <div id="main">
+
+     <div  class="box" :class="{x:flag,f:zflag}">123</div>
+     <div  class="box" :class="[x1,y1]">123</div>
+     <div :style="{width:'200px',height:'200px',background:'gold'}">123</div>
+     <div :style="[w,h,b]">123</div>
+   </div>
+
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../node_modules/axios/dist/axios.js"></script>
+
+<script>
+  /*
+  *  v-bind class  还是style  都是两种形式，对象或者数组
+  * */
+
+  var app=new Vue({
+     el:"#main",
+     data:{
+       flag:true,
+       zflag:true,
+       x1:"x",
+       y1:"f",
+       w:{
+         width:"200px"
+       },
+       h:{
+         height:"200px"
+       },
+       b:{background:"green"}
+     }
+
+
+  })
+
+</script>

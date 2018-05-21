@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   <div id="main">
+      <div @click="parent">parent
+         <div @click.self="child"> child
+           <div @click="groundSon">groundSon</div>
+         </div>
+      </div>
+   </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../node_modules/axios/dist/axios.js"></script>
+
+<script>
+  /*
+  * @事件.stop ：阻止冒泡
+  * @事件.once：只执行一次
+  * @事件.prevent：阻止默认行为
+  * @事件.self   :只有点击自己的时候才会触发
+  * */
+  var app=new Vue({
+     el:"#main",
+     methods:{
+       parent(){
+         alert("parent")
+       },
+       child(){
+         alert("child")
+       },
+       groundSon(){
+         alert("groundSon")
+       }
+     }
+  })
+</script>

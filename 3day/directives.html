@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>todo</title>
+  <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0;}
+    .navbar-deverse{background:#000;}
+    ul,ol,li{list-style:none;}
+    .nav{margin-top:20px;}
+    .lists li{margin-bottom:10px;background:lightblue;padding:10px;}
+    .del{
+      text-decoration: line-through;
+      color:#eee;
+    }
+  </style>
+
+  <!-- npm install 的时候下载错了，下成了4.0版本，下面引用cdn上的3.0版本
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+  -->
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="main">
+
+  <button v-color="'red'">变色</button>
+
+</div>
+
+</div>
+</body>
+</html>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+  /*
+  * 要实现的事情：
+  * 指令操作dom
+  * */
+  var myapp=new Vue({
+    el:"#main",
+    data:{
+
+
+    },
+    directives:{
+      color(el,bingds){
+        console.log(el,bingds);
+        /*
+        * el 代表的是添加指令的dom元素button
+        *
+        * bingds的
+        *  {name: "color", rawName: "v-color", value: "red", expression: "'red'", modifiers: {…}, …}
+        * */
+       el.style.background=bingds.value;
+      }
+    },
+    methods:{
+      add(){
+        this.lists.unshift({
+          isChecked:false,
+          title:this.addVal
+        });
+        this.addVal="";
+      },
+      rmove(list){
+        //点击删除按钮的时候删除那一项
+        this.lists=this.lists.filter(item=>{
+          return item!==list;
+        })
+      },
+      editor(list){
+        //处于编辑状态
+        this.cur=list;
+
+
+      },
+      clearcur(){
+        //当input 失去焦点的时候应该改变状态
+        this.cur="";
+
+      }
+    }
+
+
+  })
+</script>
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>
+    *{margin:0;padding:0}
+    ul,ol,li{list-style:none}
+  </style>
+</head>
+<body>
+   <div id="main">
+     <input type="text" v-model="addVal" @keyup.13="add">
+     <ul>
+       <li v-for="item in lists"><input type="checkbox" v-model="item.isChecked"> {{item.title}}  <button @click="del(item)">删除</button></li>
+     </ul>
+   </div>
+
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../node_modules/axios/dist/axios.js"></script>
+
+<script>
+
+  var app=new Vue({
+     el:"#main",
+     data:{
+       lists:[{"isChecked":true,"title":"跳舞"},{"isChecked":true,"title":"唱歌"}],
+       addVal:""
+     },
+     methods:{
+       add(){
+         this.lists.unshift({isChecked:false,"title":this.addVal});
+         this.addVal=""
+       },
+       del(val){
+        this.lists= this.lists.filter(item=>{
+           return item!==val
+         })
+       }
+     },
+   /* watch:{
+       lists(){
+         //alert(1)
+         /!*
+         * 如果只是这样监控是浅监控，只能监控到第一层的改变。数组的长度等，但是里面的小对象的具体属性值是监控不到的。当
+         * 我们改变input的状态的时候，我们发现并没有alert，要想深度监控需要按照下面那样写
+         * *!/
+
+       }
+    },*/
+    watch:{
+      //深度监控的写法 注意handler固定写法
+      lists:{
+         handler:function(){
+           alert(2)
+         },
+         deep:true
+      }
+    }
+
+
+  })
+
+</script>

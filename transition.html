@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>过渡动画</title>
+  <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0;}
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+      opacity: 0;
+    }
+    #box{
+      width:100px;height:100px;background:pink;
+      transition: all 1s linear;
+    }
+  </style>
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div id="main">
+  <button @click="flag=!flag">切换</button>
+  <transition name="fade">
+    <div v-show="flag" id="box">123</div>
+  </transition>
+
+</div>
+</body>
+</html>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script src="./node_modules/axios/dist/axios.js"></script>
+<script>
+  /* 全选逻辑：
+  * computed 计算属性优化代码，allChecked
+  *
+  * */
+  var myapp=new Vue({
+    el:"#main",
+    created(){
+      this.getDate()
+    },
+    data:{
+      flag:false
+    },
+    computed:{
+      allChecked:{
+          get(){
+           return this.lists.every(function(item){return item.isChecked})
+          },
+          set(val){
+            this.lists.forEach(function(item){
+               item.isChecked=val;
+            })
+          }
+      },
+      sum(){
+        //求总价
+
+        return this.lists.reduce(function(pre,next){
+          if(!next.isChecked){
+            return pre
+          }
+          return pre+next.price*next.count
+        },0)
+      },
+    },
+    filters:{
+
+      ftoFiexed(val,param1=2){
+       // alert(this); 过滤器中的this指的是window,过滤器中默认的第一个参数是管道符号前面的那个值，
+        // 后面的参数是传入的参数
+        return "¥"+val.toFixed(param1);
+      }
+    },
+    methods:{
+
+
+      getDate(){
+        axios({
+          methods:"get",
+          url:"data.json",
+          responseType:"json"
+
+        }).then((res)=>{
+          console.log(res);
+           this.lists=res.data;
+
+          },(err)=>{
+          console.log(err);
+        })
+      },
+      del(val){
+       this.lists= this.lists.filter(item=>{
+            return item!==val;
+        })
+      }
+
+    }
+
+
+  })
+</script>
+

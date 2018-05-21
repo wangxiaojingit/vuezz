@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>todo</title>
+  <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0;}
+    .navbar-deverse{background:#000;}
+    ul,ol,li{list-style:none;}
+    .nav{margin-top:20px;}
+    .lists li{margin-bottom:10px;background:lightblue;padding:10px;}
+    .del{
+      text-decoration: line-through;
+      color:#eee;
+    }
+  </style>
+
+  <!-- npm install 的时候下载错了，下成了4.0版本，下面引用cdn上的3.0版本
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+  -->
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="main">
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="navbar navbar-deverse col-md-12">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              todolist
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="main">
+       <h5>亲,你还有n件事情要做{{hash}}</h5>
+       <input class="form-control" type="text" placeholder="请输入要添加的事情" v-model="addVal" @keyup.13="add">
+       <ul class="nav nav-pills">
+        <li role="presentation" :class="{active:hash=='all'}" ><a href="#/all">全部完成</a></li>
+        <li role="presentation" :class="{active:hash=='unfinshed'}"><a href="#/unfinshed" >未完成</a></li>
+        <li role="presentation" :class="{active:hash=='finshed'}"><a href="#/finshed" >已经完成</a></li>
+       </ul>
+      <div class="panel panel-default" style="margin-top:20px;">
+        <div class="panel-body">
+          <ul class="lists">
+            <li v-for="list in datalists" @dblclick="editor(list)" >
+              <div :class="{del:list.isChecked}" v-show="cur!==list">
+                <input type="checkbox" v-model="list.isChecked"> <span>{{list.title}}</span><button class="btn-danger btn-xs pull-right" @click="rmove(list)" >删除</button>
+              </div>
+              <input type="text" v-model="list.title" v-show="cur==list" @blur="clearcur" v-focus="cur==list" >
+            </li>
+          </ul>
+
+        </div>
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+</div>
+</body>
+</html>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+  /*
+  * 当在页面添加完数据之后，刷新页面，发现没有保存，在这里我们想在本地保存，用到watch 深度监控lists数据，当lists数据
+  * 发生变化的时候，我们就需要用localStorege 存贮一下。
+  * */
+  var myapp=new Vue({
+    el:"#main",
+    data:{
+      lists:[{
+        isChecked:false,
+        title:"吃饭"
+      },{
+      isChecked:false,
+      title:"睡觉"
+      },{
+      isChecked:false,
+      title:"打豆豆"
+      }
+      ],
+      addVal:"",
+      cur:"",
+      hash:"all"
+     
+    },
+      directives:{
+          focus(el,bindings){
+            if(bindings.value){
+              el.focus();
+            }
+
+          }
+      },
+      computed:{
+       
+        datalists(){
+          if(this.hash=="all"){return this.lists};
+          if(this.hash=="unfinshed"){
+           return this.lists.filter(item=>{
+              return !item.isChecked
+            })
+          }
+          if(this.hash=="finshed"){
+            return this.lists.filter(item=>{
+              return item.isChecked
+            })
+          }
+          return this.lists;
+        }
+      },
+    created(){
+      this.lists=JSON.parse(localStorage.getItem("data"))||this.lists;
+      var that=this;
+      window.addEventListener("hashchange",function(){
+        if(!window.location.hash){
+          that.hash="all"
+          }else {
+            that.hash=window.location.hash.split("/")[1];
+          }
+      })
+      
+    },
+    methods:{
+      changeHash(val){
+         this.hash=val;
+      },
+      add(){
+        this.lists.unshift({
+          isChecked:false,
+          title:this.addVal
+        });
+        this.addVal="";
+      },
+      rmove(list){
+        //点击删除按钮的时候删除那一项
+        this.lists=this.lists.filter(item=>{
+          return item!==list;
+        })
+      },
+      editor(list){
+        //处于编辑状态
+        this.cur=list;
+
+
+      },
+      clearcur(){
+        //当input 失去焦点的时候应该改变状态
+        this.cur="";
+
+      }
+    },
+    watch:{
+      //深度监控，不这么写的话是浅监控，只能监控第一层，深监控可以监控到数组里面每一个对象的属性值改变
+      lists:{
+        handler(){
+          localStorage.setItem("data",JSON.stringify(this.lists))
+        },
+        deep:true
+      }
+    }
+
+
+  })
+</script>
+

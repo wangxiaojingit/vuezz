@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   <div id="main">
+     <input type="text" v-model="val">
+     <div>{{msg}}</div>
+   </div>
+
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../node_modules/axios/dist/axios.js"></script>
+
+<script>
+  /*
+  * computed 计算属性
+  * 根据输入框的value值实时校验出现该有的信息提示
+  *
+  * computed 不支持异步，watch 支持异步
+  * */
+
+  var app=new Vue({
+     el:"#main",
+     computed:{
+        msg(){
+          if(this.val.length>0&&this.val.length<3){
+            return "太短了"
+          }
+          if(this.val.length>6){
+            return "太长了"
+          }
+          return ""
+          return ""
+        }
+
+
+
+
+     },
+     data:{
+       val:""
+     }
+
+
+  })
+  var app=new Vue({
+    el:"#main2",
+
+
+  })
+</script>

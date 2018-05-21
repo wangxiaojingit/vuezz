@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   <div id="main">
+     {{'hello' | str}}
+   </div>
+   <div id="main2">
+     {{'hello' | str}}
+   </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../node_modules/axios/dist/axios.js"></script>
+
+<script>
+  /*
+  * fliter 全局过滤器
+  *
+  * 在单个Vue 实例上添加filters 的时候只能对单个实例起作用，要想让Vue 的所有实例都用，可以在构造器Vue上添加filter，
+  * 全局使用
+  * */
+  Vue.filter('str',function(val){
+     return "xj_"+val;
+  })
+  var app=new Vue({
+     el:"#main",
+
+
+
+  })
+  var app=new Vue({
+    el:"#main2",
+
+
+  })
+</script>

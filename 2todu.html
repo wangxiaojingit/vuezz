@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0;}
+  </style>
+  <link rel="stylesheet" href="">
+</head>
+<body>
+<div id="main">
+  <input type="text" v-model="val" @keyup="add">
+  <ul>
+    <li v-for="(list ,key ) in lists">{{list}} <span @click="del(key)">删除</span></li>
+  </ul>
+</div>
+</body>
+</html>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script>
+  var myapp=new Vue({
+    el:"#main",
+    data:{
+      lists:[],
+      val:''
+    },
+    methods:{
+      add:function(e){
+
+        if(e.keyCode==13){
+          this.lists.unshift(this.val);
+          this.val=""
+        }
+      },
+      del:function(key){
+
+        this.lists=this.lists.filter((item,index)=>{
+          return index!=key
+        })
+
+      }
+    }
+
+  })
+</script>
+

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   <div id="main">
+      <template v-if="flag">
+         注册 <input type="text" key="1" >
+      </template>
+     <template v-else>
+       登陆<input type="text" key="2">
+     </template>
+     <button @click="flag=!flag">切换</button>
+   </div>
+
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../node_modules/axios/dist/axios.js"></script>
+
+<script>
+  /*
+  * 动态切换dom 的时候，vue 会把结构相同的复用，如果不想复用，需要加key.
+  * 在第一个输入框输入一个值，比如：小，当点击切换按钮的时候，发现input还是带有输入文字的输入框，这就是因为两个模板中
+  * input的结构相同，vue复用了，想要解决可以在input 中加key 区别
+  * */
+
+  var app=new Vue({
+     el:"#main",
+     data:{
+       flag:true
+     }
+
+
+  })
+
+</script>

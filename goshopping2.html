@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>购物车</title>
+  <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0;}
+  </style>
+  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+<div id="main">
+  <div class="container">
+    <table class="table table-bordered ">
+      <caption style="caption-side:top;text-align:center">购物车</caption>
+      <tr>
+         <th>全选 <input type="checkbox" v-model="allChecked" ></th>
+         <th>商品</th>
+         <th>单价</th>
+         <th>数量</th>
+         <th>小计</th>
+         <th>操作 </th>
+      </tr>
+      <tr v-for="item in lists">
+        <td><input type="checkbox" v-model="item.isChecked" ></td>
+        <td>{{item.des}}</td>
+        <td>{{item.price | ftoFiexed}}</td>
+        <td><input type="number" v-model="item.count" min="0" ></td>
+       <!--  优化 此处代码，用filter
+       <td>{{(item.price*item.count).toFixed(2)}}</td>
+       -->
+        <td>{{item.price*item.count | ftoFiexed(2)}}</td>
+        <td><button @click="del(item)" >删除</button></td>
+      </tr>
+      <tr>
+        <!--sum() 这种方法，直接写在页面上不会缓存，只要页面重新渲染就会执行，耗内存.用computed来替换-->
+        <td colspan="6">总和：{{sum | ftoFiexed(2)}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script src="./node_modules/axios/dist/axios.js"></script>
+<script>
+  /* 全选逻辑：
+  * computed 计算属性优化代码，allChecked
+  *
+  * */
+  var myapp=new Vue({
+    el:"#main",
+    created(){
+      this.getDate()
+    },
+    data:{
+      lists:[]
+    },
+    computed:{
+      allChecked:{
+          get(){
+           return this.lists.every(function(item){return item.isChecked})
+          },
+          set(val){
+            this.lists.forEach(function(item){
+               item.isChecked=val;
+            })
+          }
+      },
+      sum(){
+        //求总价
+
+        return this.lists.reduce(function(pre,next){
+          if(!next.isChecked){
+            return pre
+          }
+          return pre+next.price*next.count
+        },0)
+      },
+    },
+    filters:{
+
+      ftoFiexed(val,param1=2){
+       // alert(this); 过滤器中的this指的是window,过滤器中默认的第一个参数是管道符号前面的那个值，
+        // 后面的参数是传入的参数
+        return "¥"+val.toFixed(param1);
+      }
+    },
+    methods:{
+
+
+      getDate(){
+        axios({
+          methods:"get",
+          url:"data.json",
+          responseType:"json"
+
+        }).then((res)=>{
+          console.log(res);
+           this.lists=res.data;
+
+          },(err)=>{
+          console.log(err);
+        })
+      },
+      del(val){
+       this.lists= this.lists.filter(item=>{
+            return item!==val;
+        })
+      }
+
+    }
+
+
+  })
+</script>
+

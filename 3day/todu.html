@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>todo</title>
+  <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0;}
+    .navbar-deverse{background:#000;}
+    ul,ol,li{list-style:none;}
+    .nav{margin-top:20px;}
+    .lists li{margin-bottom:10px;background:lightblue;padding:10px;}
+    .del{
+      text-decoration: line-through;
+      color:#eee;
+    }
+  </style>
+
+  <!-- npm install 的时候下载错了，下成了4.0版本，下面引用cdn上的3.0版本
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+  -->
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="main">
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="navbar navbar-deverse col-md-12">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+              todolist
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="main">
+       <h5>亲,你还有n件事情要做</h5>
+       <input class="form-control" type="text" placeholder="请输入要添加的事情" v-model="addVal" @keyup.13="add">
+       <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="#">全部完成</a></li>
+        <li role="presentation"><a href="#">未完成</a></li>
+        <li role="presentation"><a href="#">已经完成</a></li>
+       </ul>
+      <div class="panel panel-default" style="margin-top:20px;">
+        <div class="panel-body">
+          <ul class="lists">
+            <li v-for="list in lists" @dblclick="editor(list)" >
+              <div :class="{del:list.isChecked}" v-show="cur!==list">
+                <input type="checkbox" v-model="list.isChecked"> <span>{{list.title}}</span><button class="btn-danger btn-xs pull-right" @click="rmove(list)" >删除</button>
+              </div>
+              <input type="text" v-model="list.title" v-show="cur==list" @blur="clearcur" v-focus="cur==list" >
+            </li>
+          </ul>
+
+        </div>
+      </div>
+
+    </div>
+
+
+
+  </div>
+
+</div>
+</body>
+</html>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script>
+  /*
+  * 要实现的事情：
+  * 1、在inpu输入框中输入内容按回车添加到下面的列表
+  * 2、点击删除的时候就删除那一项
+  * 3、当勾选列表项目的时候，就让那一项出现删除符号
+  * 4、双击列表中的li的时候，那一项的原内容 就会消失，出现编辑的input.发生双击事件的时候，我们双击的是哪个，
+  * 就把哪个li里面的list记录下来，用cur 来保存，然后和列表中的每一项进行比较，如果相同，就让那一项的input编辑出现。
+  *
+  * 5、处于编辑状态的时候，我们应该添加一个失去焦点的事件，当失去焦点，恢复成原来的状态，给input绑定失去焦点事件。但是我们
+  * 发现在处于编辑状态的刚开始，input并没有自动获取焦点，这样的话就没办法进行失去焦点.我们点击的时候哪个li，就让那个li
+  * 里面的input自动获取焦点。要想操作dom，我们就用到了指令.当指令中传过去的值是true的时候，我们就让它主动获取焦点。关于指令可以
+  * 参考directives.html
+  * */
+  var myapp=new Vue({
+    el:"#main",
+    data:{
+      lists:[{
+        isChecked:false,
+        title:"吃饭"
+      },{
+      isChecked:false,
+      title:"睡觉"
+      },{
+      isChecked:false,
+      title:"打豆豆"
+      }
+      ],
+      addVal:"",
+      cur:""
+
+    },
+      directives:{
+          focus(el,bindings){
+            if(bindings.value){
+              el.focus();
+            }
+
+          }
+      },
+    methods:{
+      add(){
+        this.lists.unshift({
+          isChecked:false,
+          title:this.addVal
+        });
+        this.addVal="";
+      },
+      rmove(list){
+        //点击删除按钮的时候删除那一项
+        this.lists=this.lists.filter(item=>{
+          return item!==list;
+        })
+      },
+      editor(list){
+        //处于编辑状态
+        this.cur=list;
+
+
+      },
+      clearcur(){
+        //当input 失去焦点的时候应该改变状态
+        this.cur="";
+
+      }
+    }
+
+
+  })
+</script>
+
