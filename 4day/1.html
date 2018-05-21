@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue</title>
+</head>
+<body>
+    <div id="main">
+        <div ref="myp" v-for="item in arr">
+            {{item}}
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    var app=new Vue({
+        el:"#main",
+        data:{
+           arr:[1,2,3]
+        },
+        mounted(){
+            //refs 获取dom元素，只有for循环的时候可以是数组，
+            //不结合for循环 一个名字不用写多个，类似ID只对一个起作用
+            //在获取dom的时候要用nextTick，因为页面渲染是异步 
+            //在数据发生改变的时候，想要操作dom必须用this.$nextTick
+            let that=this;
+            this.$nextTick(function(){
+                console.log(that.$refs.myp)
+            })
+            
+
+        }
+    })
+</script>
