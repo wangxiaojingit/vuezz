@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父子组件传值</title>
+</head>
+<body>
+    <div id="main">
+        <parent :n="money"></parent>  
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+   /**
+     组件嵌套
+   */
+   let  child={
+       
+       template:'<div>child{{n}}</div>'
+   }           
+   let myApp=new Vue({
+       el:"#main",
+       data:{
+         money:100
+       },
+       components:{
+           parent:{
+               
+               template:'<div>parent<child></child></div>',
+               components:{
+                   child
+               }
+           }
+       }
+       
+   })
+   
+</script>

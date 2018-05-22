@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父组件嵌套子组件</title>
+</head>
+<body>
+    <div id="main">
+        <parent></parent>  
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+   /**
+     组件嵌套
+   */
+           
+   let myApp=new Vue({
+       el:"#main",
+       data:{
+
+       },
+       components:{
+          parent:{
+              template:`<div>parent <child></child></div>`,
+              components:{
+                  child:{
+                      template:"<div>child<son></son></div>",
+                      components:{
+                          son:{
+                            template:`<div>son</div>`
+                          }
+                          
+                      }
+                  }
+              }
+          }
+           
+       }
+   })
+   
+</script>

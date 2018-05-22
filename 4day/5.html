@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>component</title>
+</head>
+<body>
+    <div id="main">
+        <parent></parent>  
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+   /**
+     需求:父组件套子组件,子组件套孙子组件. 组件嵌套有两种形式,5.html(本html),6.html
+     如果是5.html 的话,组件嵌套组件,组件嵌套的里面的那个组件放到最上面,不然找不到.
+   */
+   let son={template:`<div>son</div>`};
+   let child={
+       template:`<div>child <son></son></div>`,
+       components:{
+        son
+       }
+   }
+   let parent= {
+               template:`<div>parent <child></child></div>`,
+               components:{
+                 child
+               }  
+    }           
+   let myApp=new Vue({
+       el:"#main",
+       data:{
+
+       },
+       components:{
+          parent
+       }
+   })
+   
+</script>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>component</title>
+</head>
+<body>
+    <div id="main">
+        <hello-say></hello-say>  
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+   //component:每个页面可以划分成一个组件,对于公用的部分可以抽离成基础组件
+   //component 还可划分成全局组件和局部组件
+   //全局组件中,data 必须是函数的形式,并且需要返回一个对象.
+   Vue.component("hello-say",{
+       template:`<div>{{msg}}</div>`,
+       data(){
+           return{
+               msg:"hello,nice to meet you!"
+           }
+       }
+   })
+   var myapp=new Vue({
+       el:"#main"
+   })
+
+</script>

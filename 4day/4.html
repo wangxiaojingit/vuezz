@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>component</title>
+</head>
+<body>
+    <div id="main">
+        <tem1></tem1>  
+        <tem2></tem2>  
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+   /**
+     全局组件:component
+     局部组件 components
+     全局组件和局部组件中的data都必须是函数,并且返回一个对象,因为组件应该是一个独立的作用域,
+     不能共用数据
+   */
+   let tem1={
+       "template":`<div @click="school='gj'">组件一{{school}}</div>`,
+        data(){
+           return {
+               school:"zfpx"
+           } 
+        }
+    }
+   let tem2={
+       "template":`<div @click="school='xj'">组件二{{school}}</div>`,
+        data(){
+            return {
+                school:"wxj"
+            }
+        }
+   }
+   var myapp=new Vue({
+       el:"#main",
+       data:{
+          a:1
+       },
+       components:{
+        tem1,
+        tem2
+       }
+   })
+
+</script>
