@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>todolist</title>
+    <style type="text/css" rel="stylesheet">
+    *{margin:0;padding:0}
+    .titbox{background:#000;text-align:center;color:blue;}
+    .delbut{float:right;}
+    .del{text-decoration: line-through;color:#999;}
+    .inlineblock{display:inline-block;}
+    </style>
+    <!-- <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css"> -->
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+ <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> 
+</head>
+<body>
+       
+        
+    <div id="main">
+        
+       <!--标题 -->
+       <div class="container-fluid">
+           <div class="row titbox">
+               <div class="page-header ">
+                   <h2>{{title}}</h2>
+               </div>
+           </div>
+           <p style="margin-top:20px;">亲,您还有n件事情需要做!</p>
+           <div>
+               <input type="text" class="form-control" v-model="doName" placeholder="请输入您要添加的内容" @keyup.13="add()">
+           </div>
+           <!-- tab 切换 -->
+           <ul class="nav nav-pills" style="margin-top:10px;">
+                <li role="presentation" :class="{'active':hash=='unfinished'}" ><a href="#/unfinished">未完成</a></li>
+                <li role="presentation" :class="{'active':hash=='finished'}" ><a href="#/finished">已完成</a></li>
+                <li role="presentation" :class="{'active':hash=='all'}" ><a href="#/all">全部</a></li>
+           </ul>
+           <!-- 列表组 -->
+           <ul class="list-group" style="margin-top:10px;">
+                <li class="list-group-item" v-for="(item,key) in datalists" @dblclick="edtor(item)" >
+                   <div v-if="item!==cur" class="inlineblock">
+                        <input type="checkbox" v-model="item.isChecked" /> 
+                        <span :class="{del:item.isChecked}">{{item.title}}</span>
+                   </div>  
+                   <div v-show="item==cur" class="inlineblock">
+                        <input v-focus="item==cur" type="text" class="form-control"
+                         v-model="item.title"
+                         @blur="clearblur"
+                          /> 
+                   </div>  
+                   <button  type="button" class="btn btn-danger btn-xs delbut" @click="del(item,key)">删除</button>
+                </li>
+                
+            </ul>
+       </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../node_modules/axios/dist/axios.js"></script>
+<script type="text/javascript">
+    var app=new Vue({
+        el:"#main",
+        data:{
+          title:"todolist",
+          doName:"",//点击input框添加要做的事件
+          todoLists:[],
+          cur:"",
+          hash:"unfinished",
+          
+        },
+        created(){
+            //获取hash
+            let that=this;
+            let hashUrl=window.location.href.split("#/")[1]
+            this.hash=hashUrl?hashUrl:"unfinished";
+
+            if(localStorage.getItem("todoLists")){
+              this.todoLists=JSON.parse(localStorage.getItem("todoLists"));
+              
+            }
+            window.addEventListener("hashchange",function(){
+                //监听hash 变化,
+                that.hash=window.location.href.split("#/")[1];
+            })
+        },
+        computed:{
+            datalists(){
+                if(this.hash=="unfinished"){
+                   return this.todoLists.filter(item=>{
+                       return !item.isChecked
+                   });
+                }
+                if(this.hash=="finished"){
+                    return this.todoLists.filter(item=>{
+                       return item.isChecked
+                   });
+                }
+                if(this.hash=="all"){
+                  return this.todoLists;
+                }
+            }
+        },
+        directives:{
+          focus(el,bindings){
+              console.log(el,bindings);
+             
+            if(bindings.value){
+                debugger;
+                console.log(el);
+                el.focus();
+            }
+
+          }
+        },
+
+        methods:{
+            add(){
+                this.todoLists.push({isChecked:false,title:this.doName});
+                
+                this.doName="";
+                
+            },
+            del(todo,key){
+                this.todoLists=this.todoLists.filter(item=>{
+                     return todo!=item;
+                })
+            },
+            edtor(todo){
+                //点击双击的时候处于编辑状态
+                this.cur=todo;
+            },
+            clearblur(){
+                debugger;
+                this.cur=""
+            },
+           
+            
+        },
+        watch:{
+            todoLists(newVal){
+               localStorage.setItem("todoLists",JSON.stringify(this.todoLists))
+            }
+        }
+    })
+</script>

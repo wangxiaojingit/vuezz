@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    let app=new Vue({
+        el:"#app",
+        beforeCreated(){
+
+        },
+        data:{
+           a:1
+        },
+        created(){
+
+        },
+        template:'<div>{{a}}</div>',//如果有template会用模板替换掉外部的html,只要有此属性,
+        //app中的内容就没有意义,只能有一个根元素
+        beforeMount(){
+
+        },
+        mounted(){},
+        beforeUpdated(){},
+        updatated(){},
+        beforeDestoryed(){
+            //销毁前可以清除一些定时器,或者监听事件等
+        },
+        destoryed(){}
+
+
+       
+    })
+</script>
