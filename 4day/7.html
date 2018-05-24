@@ -8,7 +8,8 @@
 </head>
 <body>
     <div id="main">
-        <parent :n="money"></parent>  
+        <!--<parent :n="money"></parent>  -->
+        <parent :n=400></parent>  
     </div>
 </body>
 </html>
@@ -17,22 +18,30 @@
    /**
      组件嵌套
    */
-   let  child={
-       
-       template:'<div>child{{n}}</div>'
-   }           
+            
    let myApp=new Vue({
        el:"#main",
        data:{
-         money:100
+         money:"100"
        },
        components:{
            parent:{
                
-               template:'<div>parent<child></child></div>',
-               components:{
-                   child
-               }
+               //props:["n"],数组的形式无法校验
+               template:'<div>parent{{n}}</div>',
+               props:{
+                   n:{
+                    type:[Number,Boolean],//校验数据类型，不加引号
+                    //default:200 ,//不传的时候默认赋值
+                    //required:true//必须填，不然出警告
+                    validator:function(val){
+                       //自定义校验器
+                       //第一个参数是默认传递的值
+                       return val>300 //返回true代表校验通过，false代表失败。
+                    }
+                   }
+                  
+               },
            }
        }
        
