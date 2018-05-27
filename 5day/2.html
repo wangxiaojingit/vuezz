@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>slot</title>
+</head>
+<body>
+    <div id="main">
+       
+        <modal ref="modal" >
+            <div slot="title">今日心情</div>
+            <div slot="content">微笑</div>
+            <div>new</div>
+            <button @click="hide">隐藏</button>
+        </modal>
+        
+    </div>
+    <template id="modal" >
+       <div v-show="flag">
+           <slot name='default'></slot>
+           <slot name="title"></slot>
+           <slot name="content"></slot>
+           <div>123</div>
+           
+        </div>
+       
+    </template>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+   /**
+    如果在 <modal></modal> 组件中想要添加内容，我们必须用slot,
+    不然就不会出现。
+    如果要想插入的内容有顺序，我们可以给slot一个名字,如果不给名字
+    默认是<slot name="default"></slot>
+
+    在普通元素上用ref，直接就获取dom，在组件上如果用ref，获取到的
+    是组件，如果想用ref获得dom得加$el
+
+    
+   */
+   let modal={
+       template:"#modal",
+       data(){
+           return{
+               flag:true
+           }
+       },
+       methods:{
+           hide(){
+               this.flag=false;
+           }
+       }
+   }
+    var app=new Vue({
+        el:"#main",
+        mounted(){
+            
+        },
+        data:{
+           
+        },
+        components:{
+            modal
+        },
+        methods:{
+            hide(){
+            this.$refs.modal.hide();//父组件调用子组件的方法
+            //在组件上如果想用ref获得dom得加$el
+            this.$refs.modal.$el.style.color="gold"
+            }
+        }
+    })
+</script>
