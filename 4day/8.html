@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="main">
+        parent:{{money}}
+        <child v-bind:n="money" p=1 :p2=2 :p5=400></child>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    let myapp=new Vue({
+        el:"#main",
+        data:{
+            money:"100"
+        },
+        components:{
+            child:{
+                props:{
+                   n:{
+                       type:[Number,Boolean]
+                   },
+                   p:{
+                       type:[Number]
+                   },
+                   p3:{
+                      type:[Number],
+                      defaut:300 //不传的时候默认值
+                   },
+                   p4:{
+                       type:[Number],
+                       required:true //必须传的值,不传会有警告
+                   },
+                   p5:{
+                       type:[Number],
+                       validator:function(val){ //自定义校验器,第一个参数为默认传进来的值,如果返回条件会true,就符合校验,false就校验失败
+                           return val>300
+                       }
+                   }
+
+                },
+                //props:["n","p","p2"],// 在组件上绑定属性的时候,可以绑定常量,写成数组的形式不能验证
+                //也可以绑定动态变量 如果绑定常量获取到的都是字符串,要想变成number,需要加:,代表js环境
+                template:`<div>child{{n}}p:{{p}}p3:{{p3}}p5:{{p5}}</div>`
+            }
+        }
+    })
+</script>
