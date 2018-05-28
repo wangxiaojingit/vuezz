@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ref</title>
+</head>
+<body>
+    <div id="main">
+        <div ref="box">123</div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+   /**
+    如果在普通的元素上用ref,$refs 获取到的就是这个dom元素，
+    如果在。。。。。。,获取到的是这个组件，可以直接调用组件上
+    的方法：this.$refs.xx.fn(),
+   */
+    var app=new Vue({
+        el:"#main",
+        mounted(){
+            console.log(this.$refs.box)//
+        },
+        data:{
+
+        }
+    })
+</script>

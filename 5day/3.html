@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>切换两个组件</title>
+</head>
+<body>
+    <div id="main">
+        <!--component 是vue的一个标签，is=自定义的组件的名字
+        此处就会渲染自定义的那个组件-->
+        <keep-alive>
+          <component :is="val"></component>
+        </keep-alive>
+        {{val}}
+        <!--<component is="parent"></component>-->
+        <div>
+            <input type="radio" v-model="val" value="parent">parent
+            <input type="radio" v-model="val" value="child">child
+        </div>
+    </div>
+    <template id="parent">
+        <div >
+            parent
+        </div>
+    </template>
+    <template  id="child">
+            <div>
+                child
+            </div>
+        </template>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    /**
+       1、vue 中有一个自定义标签component,is属性值等于想要渲染的自定义
+       标签的名字
+       <component is="parent"></component>
+       2、在<input type="radios" v-model="val" value="parent">
+       要想在点击单选按钮的时候，val取的值来自value
+       3、切换组件的时候，组件会销毁，想要缓存<keep-alive>
+       4、凡是操作dom元素，我们必须在获取前用this.$nextTick()
+    */ 
+    let parent={
+        template:"#parent"
+    }
+    let child={
+        template:"#child"
+    }
+  var myApp=new Vue({
+      el:"#main",
+      data:{
+          val:"parent"
+      },
+      components:{
+          parent,child
+      }
+  })
+</script>

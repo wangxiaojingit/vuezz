@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>子传父 $emit</title>
+</head>
+<body>
+    <div id="main">
+        父亲：{{money}}
+        <child :m="money" @say="change"></child>
+    </div>
+</body>
+</html>
+<script type="text/javascript" 
+src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    /**
+     * 数据传输只能是单向的，父亲传给儿子值，儿子想改变，只能通过父亲改变了
+     * ，儿子才可以改变。
+    */
+     var myApp=new Vue({
+         el:"#main",
+         data:{
+             money:100
+         },
+         methods:{
+            change(val){
+                this.money=val;
+            }
+         },
+         components:{
+             child:{
+                 props:["m"],
+                 template:`<div>儿子：{{m}}<button @click="more">多点钱</button></div>`,
+                 data(){
+                   return {
+                       n:300
+                   }
+                 },
+                 methods:{
+                    more(){
+                        //自定义事件
+                        this.$emit("say",400)//触发自定义事件
+                    }
+                 } 
+                }
+         }
+     })
+
+    
+ </script>  
