@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件循环</title>
+   <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"  >
+</head>
+<body>
+    <div id="main">
+
+          <panel @say="psay" ref="panel" v-for="(item,index ) in lists" :key="index">
+            <div slot="title">{{item.title}}</div>
+            <div slot="content">{{item.content}} </div>
+           <div v-if="item.auth">作者: <span >{{item.auth}}</span>    </div> 
+        </panel>
+    </div>
+    <template id="panel" color="warning">
+        <div class="panel" :class="[colorP]">
+                <div class="panel-heading" ref="tit">
+                   <slot name="title" ></slot>
+                </div>
+                <div class="panel-body">
+                    <slot name="content">123</slot>
+                </div>
+                <div class="panel-footer">
+                    <slot>匿名</slot>
+                    <button @click="sayTitle">弹标题</button>
+                </div>
+        </div>
+    </template>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    /**
+      如果 v-for 循环的是一个组件的话,我们必须绑定一个key
+    */
+    let panel={
+        template:"#panel",
+        computed:{
+           colorP(){
+               return "panel-"+this.color;
+           }
+        },
+        props:{
+            color:{
+                type:String,
+                default:"info",
+
+            }
+        },
+        methods:{
+            sayTitle(){
+              this.$emit("say",this.$refs.tit.innerText)
+            }
+        }
+    }
+    let myApp=new Vue({
+        el:"#main",
+        components:{
+            panel
+        },
+        data:{
+          lists:[{"title":"vue","content":"vue内容","author":"wxj"},
+          {"title":"react","content":"react内容","author":"wxj"},
+          {"title":"node","content":"node内容"}
+          ]
+        },
+        methods:{
+            psay(val){
+              // console.log(this.$refs.panel.$el)
+              alert(val)
+            }
+        }
+    })
+</script>

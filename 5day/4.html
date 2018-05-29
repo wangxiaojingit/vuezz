@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>封装一个面板组件</title>
+   <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"  >
+</head>
+<body>
+    <div id="main">
+        <panel @say="psay" ref="panel">
+            <div slot="title">promise 详细剖析</div>
+            <div slot="content">promise content </div>
+           <div>作者: wangxiaojin</div> 
+        </panel>
+    </div>
+    <template id="panel" color="warning">
+        <div class="panel" :class="[colorP]">
+                <div class="panel-heading" ref="tit">
+                   <slot name="title" ></slot>
+                </div>
+                <div class="panel-body">
+                    <slot name="content">123</slot>
+                </div>
+                <div class="panel-footer">
+                    <slot>匿名</slot>
+                    <button @click="sayTitle">弹标题</button>
+                </div>
+        </div>
+    </template>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    /**
+       1\在模板中<slot></slot> 标签渲染规则,如果页面上没有slot 对应的div,那么就会渲染slot标签中的内容,如果有则
+       渲染html对应的div中的内容.
+       2\props 进行传值,通过父组件传递到子组件中的值,在子组件中不能修改,可以通过计算属性,或者在data里再赋一个值
+       3\如果想获取dom元素,用到了ref,这个ref不能写在solt上,solt标签会都替换掉.
+    */
+    let panel={
+        template:"#panel",
+        computed:{
+           colorP(){
+               return "panel-"+this.color;
+           }
+        },
+        props:{
+            color:{
+                type:String,
+                default:"info",
+
+            }
+        },
+        mounted(){
+            this.$nextTick(function(){
+                debugger;
+                console.log(this.$refs.tit)
+            })
+        },
+        methods:{
+            sayTitle(){
+              this.$emit("say",this.$refs.tit.innerText)
+            }
+        }
+    }
+    let myApp=new Vue({
+        el:"#main",
+        components:{
+            panel
+        },
+        methods:{
+            psay(val){
+              // console.log(this.$refs.panel.$el)
+              alert(val)
+            }
+        }
+    })
+</script>

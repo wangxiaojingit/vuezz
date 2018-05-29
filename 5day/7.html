@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>并行组件之间如何传值 eventBus </title>
+</head>
+<body>
+    <div id="main">
+            <button1></button1>
+            <button2></button2>
+    </div>
+    <template id="button1">
+      <div>
+        {{color}}<button @click="changecolor">让下面按钮变绿</button>
+      </div>
+    </template>
+    <template id="button2">
+      <div>
+        {{color}}<button @click="changecolor">让下面的按钮变红</button>
+      </div>
+    </template>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+   //需求:有两个按钮,点击按钮1的时候让按钮2变色,
+   //点击按钮2的时候让按钮一变色 
+   //实现两个并行组件之间的交互
+   let eventBut=new Vue;
+   let button1={
+       template:"#button1",
+       created(){
+           eventBut.$on("changecolorUp",(val)=>{
+               this.color=val;
+           })
+       },
+       data(){
+           return {
+               color:"绿色",
+               oldColor:"绿色"
+           }
+       },
+       methods:{
+            changecolor(){
+                eventBut.$emit("changecolorDown",this.oldColor)
+            }
+       }
+   } 
+   let button2={
+       template:"#button2",
+       data(){
+           return {
+               color:"红色",
+               oldColor:"红色"
+           }
+       },
+       created(){
+            eventBut.$on("changecolorDown",(val)=>{
+                this.color=val;
+            })
+       },
+       methods:{
+        changecolor(){
+            eventBut.$emit("changecolorUp",this.oldColor)
+        }
+       }
+   } 
+   var myApp=new Vue({
+       el:"#main",
+       components:{
+           button1,button2
+       }
+   })
+</script>

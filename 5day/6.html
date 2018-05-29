@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>eventBus</title>
+</head>
+<body>
+    <div id="main">
+        <button1></button1> 
+        <button2></button2> 
+    </div>
+    <template id="button1">
+        <div>
+           {{color}},<button @click="change1">变绿色</button>
+        </div>
+    </template>
+    <template id="button2">
+        <div>
+                {{color}},<button @click="change2">变红色</button>
+        </div>
+           
+    </template>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script>
+    let eventBus=new Vue();
+    let button1={
+        template:`#button1`,
+        created(){
+            eventBus.$on("changecolor1",(val)=>{
+               alert(val);
+               this.color=val;
+            })
+        },
+        data(){
+            return {
+                color:"绿色",
+                oldColor:"绿色"
+            }
+        },
+        methods:{
+            change1(){
+                eventBus.$emit("changecolor2",this.oldColor)
+            }
+        }
+        
+    }
+    let button2={
+        template:`#button2`,
+        data(){
+            return {
+                color:"红色",
+                oldColor:"红色"
+            }
+        },
+        created(){
+            eventBus.$on("changecolor2",(val)=>{
+                 this.color=val;
+            })
+        },
+        methods:{
+            change2(){
+                eventBus.$emit("changecolor1",this.oldColor)
+            }
+        }
+    }
+    var myApp=new Vue({
+        el:"#main",
+        components:{
+            button1,button2
+        },
+        methods:{
+            color1(val){
+                alert("3")
+            }
+        }
+    })
+</script>

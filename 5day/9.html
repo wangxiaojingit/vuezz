@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>路由</title>
+</head>
+<body>
+    <div id="main">
+        <router-link to="/home">Go to home</router-link>
+        <router-link to="/message">go to message</router-link>
+      <router-view></router-view>
+    </div>
+</body>
+</html>
+<script type="text/javascript" src="../node_modules/vue/dist/vue.js"></script>
+<script type="text/javascript" src="../node_modules/vue-router/dist/vue-router.js"></script>
+<script>
+    //需要注意两点: 在Vue实例中,路由的选项为:router, 在VueRouter 中的路由选项为routes,注意单词的拼写
+    let home={template:`<div>home</div>`}
+    let message={template:`<div>message</div>`}
+    let routes=[
+        {path:"/home",component:home},
+        {path:"/message",component:message}
+    ]
+
+    let router=new VueRouter({
+        routes,
+        mode:"hash", //history
+    })
+    let myapp=new Vue({
+        
+        el:"#main",
+        components:{
+          home,message
+        },
+        router
+    })
+    
+   
+</script>
