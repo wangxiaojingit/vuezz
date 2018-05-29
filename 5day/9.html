@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>路由</title>
+    <style type="text/css">
+   /* .router-link-active{
+       background:red;
+    }*/
+    .active{
+       background:red;
+    }
+    </style>
 </head>
 <body>
     <div id="main">
-        <router-link to="/home">Go to home</router-link>
-        <router-link to="/message">go to message</router-link>
+     <!--    <a href="#/home">home</a>
+        <a href="#/message">message</a>-->
+        <router-link to="/home" tag="button">Go to home</router-link>
+        <router-link to="/message" tag="button">go to message</router-link>
       <router-view></router-view>
     </div>
 </body>
@@ -28,6 +38,7 @@
     let router=new VueRouter({
         routes,
         mode:"hash", //history
+        linkActiveClass:"active" //修改router-link 里面的选中的css类名,默认是:router-link-active
     })
     let myapp=new Vue({
         
