@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>带参数的路由</title>
+</head>
+<body>
+    <div id="main">
+        <!--如果路由跳转,用了对象的形式,并且有参数,那么必须给路由起一个名字,用这种方式去写-->
+           <router-link :to="{name:'one',params:{id:1,index:'index'}}" tag="button">文章1</router-link>
+      <!--如果路由上传的有参数的时候,并且用对象的方式,下面这种方式会有问题-->
+      <!-- <router-link :to="{path:'/article',params:{id:1,index:'index'}}" tag="button">文章1</router-link>-->
+      <!-- <router-link to="/article/1/index" tag="button">文章1</router-link>-->
+       <router-link to="/article/2/index" tag="button" >文章2</router-link>
+       <router-link to="/article/3/index" tag="button" >文章3</router-link>
+       <router-view></router-view>
+    </div>
+    
+</body>
+</html>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="../node_modules/vue-router/dist/vue-router.js"></script>
+<script>
+    /**
+      带参数的路由,我们可以按照下面的方式
+       <router-link to="/article/1/index" tag="button">
+       {path:"/article/:id/:index"}
+       想要在组件中获取可以 this.$route.params.id /this.$route.params.index
+    */
+    let article={
+        template:`<div>第{{$route.params.id}}---a:{{$route.params.index}}篇文章</div>`,
+        mounted(){
+            console.log(this.$route.params)
+        }
+    }
+    let routes=[
+        {
+            path:"/article/:id/:index",
+            component:article,
+            name:"one"
+            },
+        ]
+   let router=new VueRouter({
+       routes
+   })
+   var app=new Vue({
+       el:"#main",
+       router
+   })
+</script>

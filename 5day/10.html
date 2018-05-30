@@ -4,14 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>重定向</title>
 </head>
 <body>
-    <div id="main"></div>
+    <div id="main">
+        <router-link to="/home" tag="button">首页</router-link>
+        <router-link to="/message" tag="button">详情页</router-link>
+        <router-view></router-view>
+    </div>
 </body>
 </html>
 <script src="../node_modules/vue/dist/vue.js"></script>
 <script src="../node_modules/vue-router/dist/vue-router.js"></script>
 <script>
-
+    /**
+      1、给个默认路由：{path:"",component:home}
+      2、当胡乱输入网址的时候，路由重定向:{path:"*",redirect:"/home"}
+    
+    */
+   let home={
+       template:'<div>home</div>'
+   }  
+   let child={
+       template:'<div>详情页</div>'
+   }
+   let routes=[
+       {path:"",component:home},
+       {path:'/home',component:home},
+       {path:'/message',component:child},
+       //{path:'*',component:child},//这个路由没有替换,只是替换了组件
+       {path:'*',redirect:"/home"} //重定向,如果胡乱输入网址,通过重定向,可以把路由替换
+       ]
+   let router=new VueRouter({
+       routes
+   })
+   var app=new Vue({
+       el:"#main",
+       router
+   })
 </script>

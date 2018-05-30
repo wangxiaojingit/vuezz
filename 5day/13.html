@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>带参数的路由</title>
+</head>
+<body>
+    <div id="main">
+        <router-link to="/article/1/于">文章一</router-link>
+        <router-link :to="{name:'two',params:{id:2,name:'域'}}">文章二</router-link>
+       
+        <router-view></router-view>
+    </div>
+</body>
+</html>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="../node_modules/vue-router/dist/vue-router.js"></script>
+<script>
+    let article={
+        template:`<div>我是第{{$route.params.id||0}}遍文章,作者:{{$route.params.name||默}}</div>`
+    }
+    let routes=[
+        {path:'/article/:id/:name',component:article,name:"two"},
+        
+    ]
+    let router=new VueRouter({
+        routes
+    })
+    var app=new Vue({
+        el:"#main",
+        router
+    })
+</script>

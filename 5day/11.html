@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>路由嵌套</title>
+</head>
+<body>
+    <div id="main">
+       <router-link to="/home">首页</router-link>
+       <router-link to="/message">详情页</router-link>
+       <router-view></router-view>
+    </div>
+    <template id="message">
+            <div>
+                <p>详情页</p>
+                <router-link to="/message/myMood">我的心情</router-link>
+                <router-link to="/message/about">关于我</router-link>
+                <router-view></router-view>
+            </div>
+    </template>
+</body>
+</html>
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="../node_modules/vue-router/dist/vue-router.js"></script>
+<script>
+    /**
+      1、给个默认路由：{path:"",component:home}
+      2、当胡乱输入网址的时候，路由重定向:{path:"*",redirect:"/home"}
+    
+    */
+    let home={
+        template:`<div>home</div>`
+    }
+    let message={
+        template:"#message"
+    }
+    let myMood={
+        template:`<div>我的心情:微笑</div>`
+    }
+    let about={
+        template:`<div>关于我啊,你猜</div>`
+    }
+    let routes=[
+        {path:"/home",component:home},
+        {
+            path:"/message",
+            component:message,
+            children:[
+                {path:"myMood",component:myMood},//路由嵌套的时候,子路由不能加/,加斜杠就相当于到根路由,即一级路由
+                {path:"about",component:about},
+             ]
+            }
+        ]
+   let router=new VueRouter({
+       routes
+   })
+   var app=new Vue({
+       el:"#main",
+       router
+   })
+</script>
