@@ -24,16 +24,26 @@
 <script src="../node_modules/vue-router/dist/vue-router.js"></script>
 <script>
     /**
-      带参数的路由,我们可以按照下面的方式
+      1\带参数的路由,我们可以按照下面的方式
        <router-link to="/article/1/index" tag="button">
        {path:"/article/:id/:index"}
        想要在组件中获取可以 this.$route.params.id /this.$route.params.index
+       2\ 通过带参数的路由跳转,进行切换,我们每次切换的时候都要请求ajax,如果我们只是在created 里面
+       写请求的时候,只能触发一次,因为组件长的相同,vue 没有让组件销毁,如果想要每次切换路由的时候,请求,
+       我们可以写一个watch{ $route} ,因为每次改变的时候,$route.params 的参数都会改变
+       
     */
     let article={
         template:`<div>第{{$route.params.id}}---a:{{$route.params.index}}篇文章</div>`,
         mounted(){
             console.log(this.$route.params)
+        },
+        watch:{
+            $route(){
+              alert("1")
+            }
         }
+        
     }
     let routes=[
         {
@@ -44,6 +54,7 @@
         ]
    let router=new VueRouter({
        routes
+    
    })
    var app=new Vue({
        el:"#main",
